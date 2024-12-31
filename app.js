@@ -1,43 +1,50 @@
 const Imap = require('imap');
 const { inspect } = require('util');
 
-document.getElementById('emailForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+console.log('Script loaded'); // Ensure script runs
 
+// Attach event listener to the form
+document.getElementById('emailForm').addEventListener('submit', function(event) {
+  event.preventDefault(); // Prevent form clearing and page reload
+  console.log('Form submitted'); // Debugging log
+
+  // Get form values
   const username = document.getElementById('username').value;
   const password = document.getElementById('password').value;
   const imapServer = document.getElementById('imapServer').value;
   const port = parseInt(document.getElementById('port').value);
   const ssl = document.getElementById('ssl').checked;
 
-  // Update status and show loading
-  document.getElementById('status').innerText = '';
-  document.getElementById('loading').style.display = 'block';
+  console.log('User input:', { username, password, imapServer, port, ssl });
 
-  // Connect to IMAP with the user-provided credentials
+  // Update status
+  document.getElementById('status').innerText = 'Connecting...';
+
+  // Call the function to connect to IMAP
   connectToIMAP(username, password, imapServer, port, ssl);
 });
 
 // Function to connect to the IMAP server
-function connectToIMAP(user, pass, host, port, ssl) {
+function connectToIMAP(user, pass, host, port, useSSL) {
   const imap = new Imap({
-    user: user,
-    password: pass,
-    host: host,
-    port: port,
-    tls: ssl,
+    user: user,           // User's email address
+    password: pass,       // User's password (or app password if two-factor authentication is enabled)
+    host: host,           // IMAP server address (e.g., 'mail.domain.com')
+    port: port,           // IMAP server port (usually 993 for SSL)
+    tls: useSSL,          // SSL checkbox value
   });
 
   // IMAP connection ready
   imap.once('ready', function() {
-    document.getElementById('loading').style.display = 'none';
     document.getElementById('status').innerText = 'Connected to IMAP server. Fetching emails...';
+    console.log('Connected to IMAP server.');
 
     // Open the inbox
     imap.openBox('INBOX', false, function(err, box) {
       if (err) {
         document.getElementById('status').innerText = 'Error opening inbox: ' + err.message;
-        throw err;
+        console.error('Error opening inbox:', err);
+        return;
       }
       console.log('Mailbox opened:', box);
       fetchEmails(imap);
@@ -46,8 +53,7 @@ function connectToIMAP(user, pass, host, port, ssl) {
 
   // Handle IMAP errors
   imap.once('error', function(err) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('status').innerText = `IMAP Error: ${err.message}. Please check your credentials and server settings.`;
+    document.getElementById('status').innerText = 'IMAP Error: ' + err.message;
     console.error('IMAP Error:', err);
   });
 
@@ -66,16 +72,15 @@ function fetchEmails(imap) {
   imap.search(['ALL'], function(err, results) {
     if (err) {
       document.getElementById('status').innerText = 'Error searching emails: ' + err.message;
-      throw err;
+      console.error('Error searching emails:', err);
+      return;
     }
 
     const fetch = imap.fetch(results, { bodies: '' });
-    const emailList = document.createElement('ul'); // Create an email list container
-
     fetch.on('message', function(msg, seqno) {
-      const emailItem = document.createElement('li');
-      emailList.appendChild(emailItem);
+      console.log('Message #%d', seqno);
 
+      const prefix = '(#' + seqno + ') ';
       msg.on('body', function(stream, info) {
         let buffer = '';
         stream.on('data', function(chunk) {
@@ -83,14 +88,13 @@ function fetchEmails(imap) {
         });
 
         stream.once('end', function() {
-          emailItem.textContent = `Email #${seqno}: ${buffer}`;
+          console.log(prefix + 'Body: ' + inspect(buffer));
         });
       });
     });
 
     fetch.once('end', function() {
-      document.getElementById('status').innerText = 'Emails fetched successfully!';
-      document.body.appendChild(emailList); // Display the email list
+      console.log('Done fetching messages.');
       imap.end();
     });
   });
