@@ -42,8 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
             status.textContent = "Login successful!";
             status.style.color = "green";
 
-            // Perform actions on successful login
-            console.log("Logged in with:", { username, server, port, ssl });
+            // Redirect or load a new page
+            setTimeout(() => {
+                window.location.href = "dashboard.html"; // Replace with the next page
+            }, 1500);
+
         } catch (error) {
             // On failure
             loading.style.display = "none";
