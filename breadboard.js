@@ -1,44 +1,61 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
     const emailList = document.getElementById("emailList");
     const emailContent = document.getElementById("emailContent");
+    const refreshButton = document.getElementById("refreshButton");
+    const logoutButton = document.getElementById("logoutButton");
+    const loggedInUser = document.getElementById("loggedInUser");
 
-    // Mock email data
-    let emails = [
-        { id: 1, subject: "Welcome to Breadboard!", body: "Hello, thank you for using our app!" },
-        { id: 2, subject: "Weekly Update", body: "Here are the updates for this week..." },
-        { id: 3, subject: "Meeting Reminder", body: "Don't forget about the meeting tomorrow at 10 AM." },
+    // Fetch logged-in user's email
+    const loggedInEmail = sessionStorage.getItem("loggedInEmail");
+    if (loggedInEmail) {
+        loggedInUser.textContent = `Logged in as: ${loggedInEmail}`;
+    } else {
+        window.location.href = "index.html";
+    }
+
+    // Dummy emails (replace with actual server-side logic)
+    const emails = [
+        { id: 1, title: "Welcome to Breadboard!", sender: "no-reply@example.com", time: "2024-12-31 10:00", body: "Welcome to the app!" },
+        { id: 2, title: "Weekly Update", sender: "updates@example.com", time: "2024-12-30 14:00", body: "Here's your weekly update." },
+        { id: 3, title: "Meeting Reminder", sender: "events@example.com", time: "2024-12-29 08:00", body: "Don't forget about the meeting!" }
     ];
 
-    // Function to render the email list
-    function renderEmailList() {
-        emailList.innerHTML = ""; // Clear the list
+    // Populate email list
+    function loadEmails() {
+        emailList.innerHTML = "";
         emails.forEach(email => {
-            const div = document.createElement("div");
-            div.className = "email-item";
-            div.textContent = email.subject;
-            div.onclick = () => viewEmail(email);
-            emailList.appendChild(div);
+            const emailItem = document.createElement("div");
+            emailItem.classList.add("email-list-item");
+            emailItem.dataset.id = email.id;
+            emailItem.innerHTML = `
+                <div class="email-title">${email.title}</div>
+                <div class="email-meta">${email.sender} - ${email.time}</div>
+            `;
+            emailList.appendChild(emailItem);
+
+            // Add click event to load email content
+            emailItem.addEventListener("click", () => {
+                emailContent.innerHTML = `
+                    <h2>${email.title}</h2>
+                    <p><strong>From:</strong> ${email.sender}</p>
+                    <p><strong>Time:</strong> ${email.time}</p>
+                    <p>${email.body}</p>
+                `;
+            });
         });
     }
 
-    // Function to display email content
-    function viewEmail(email) {
-        emailContent.innerHTML = `
-            <h2>${email.subject}</h2>
-            <p>${email.body}</p>
-        `;
-    }
+    // Refresh button logic
+    refreshButton.addEventListener("click", () => {
+        loadEmails(); // Reload email list (replace with server call)
+    });
 
-    // Function to refresh the inbox (placeholder for real fetch logic)
-    function refreshInbox() {
-        emailContent.innerHTML = "<h2>Refreshing inbox...</h2>";
-        setTimeout(() => {
-            renderEmailList(); // Re-render the list after "refresh"
-            emailContent.innerHTML = "<h2>Select an email to view its content</h2>";
-        }, 1000); // Mock delay
-    }
+    // Logout button logic
+    logoutButton.addEventListener("click", () => {
+        sessionStorage.removeItem("loggedInEmail");
+        window.location.href = "index.html";
+    });
 
-    // Initial render
-    renderEmailList();
-    window.refreshInbox = refreshInbox; // Expose refreshInbox to the button
+    // Initial load
+    loadEmails();
 });
