@@ -3,107 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mail-Bread</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f9f9f9;
-        }
-        .container {
-            text-align: center;
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .banner {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        input[type="text"], input[type="password"], input[type="number"] {
-            width: 100%;
-            max-width: 300px;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        input[type="checkbox"] {
-            margin-right: 5px;
-        }
-        button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #0056b3;
-        }
-        #loading {
-            display: none;
-            color: green;
-            font-weight: bold;
-        }
-        #status {
-            margin-top: 10px;
-            color: red;
-        }
-    </style>
+    <title>Email Bread - Login</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="banner">
-            Welcome to Mail-Bread! <span>🍞</span>
-        </div>
+    <div class="login-container">
+        <h1>Email Bread 🍞</h1>
         <form id="emailForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" placeholder="Enter your username">
+            <label for="username">Email:</label>
+            <input type="email" id="username" required>
             
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" placeholder="Enter your password">
-            <div>
-                <input type="checkbox" id="showPassword">
-                <label for="showPassword">Show Password</label>
-            </div>
+            <input type="password" id="password" required>
+            <label>
+                <input type="checkbox" id="showPassword"> Show Password
+            </label>
             
-            <label for="server">IMAP Server:</label>
-            <input type="text" id="server" name="server" placeholder="imap.example.com">
+            <label for="server">Server:</label>
+            <input type="text" id="server" required>
             
             <label for="port">Port:</label>
-            <input type="number" id="port" name="port" placeholder="993" value="993">
+            <input type="number" id="port" required>
             
-            <label for="ssl">SSL:</label>
-            <input type="checkbox" id="ssl" name="ssl" checked>
-            <label for="ssl">Use SSL</label>
+            <label>
+                <input type="checkbox" id="ssl"> Use SSL
+            </label>
             
-            <button type="submit">Log In</button>
+            <button type="submit">Login</button>
         </form>
-        <div id="loading">Loading...</div>
+        <div id="loading" style="display: none;">Loading...</div>
         <div id="status"></div>
     </div>
     <script src="app.js"></script>
-    <script>
-        // Show password toggle
-        document.getElementById("showPassword").addEventListener("change", function () {
-            const passwordField = document.getElementById("password");
-            passwordField.type = this.checked ? "text" : "password";
-        });
-    </script>
 </body>
 </html>
