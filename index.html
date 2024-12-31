@@ -3,36 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Bread - Login</title>
+    <title>Email-Bread Login</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="login-container">
-        <h1>Email Bread 🍞</h1>
-        <form id="emailForm">
-            <label for="username">Email:</label>
-            <input type="email" id="username" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" required>
-            <label>
+        <h1 class="login-header">Email-Bread 🍞</h1>
+        <form id="emailForm" class="login-form">
+            <div class="form-group">
+                <label for="username">Email:</label>
+                <input type="email" id="username" name="username" placeholder="yourname@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 <input type="checkbox" id="showPassword"> Show Password
-            </label>
-            
-            <label for="server">Server:</label>
-            <input type="text" id="server" required>
-            
-            <label for="port">Port:</label>
-            <input type="number" id="port" required>
-            
-            <label>
-                <input type="checkbox" id="ssl"> Use SSL
-            </label>
-            
-            <button type="submit">Login</button>
+            </div>
+            <div class="form-group">
+                <label for="server">IMAP Server:</label>
+                <input type="text" id="server" name="server" placeholder="imap.example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="port">Port:</label>
+                <input type="number" id="port" name="port" placeholder="993" value="993" required>
+            </div>
+            <div class="form-group">
+                <label for="ssl">
+                    <input type="checkbox" id="ssl" name="ssl" checked> Enable SSL
+                </label>
+            </div>
+            <button type="submit" class="submit-button">Log In</button>
         </form>
-        <div id="loading" style="display: none;">Loading...</div>
-        <div id="status"></div>
+        <div id="loading" class="loading-message">Loading...</div>
+        <div id="status" class="status-message"></div>
     </div>
     <script src="app.js"></script>
 </body>
