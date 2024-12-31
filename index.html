@@ -1,11 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Client</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mail-Bread</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="password"], input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      font-size: 14px;
+    }
+    input[type="checkbox"] {
+      margin-top: 5px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      font-size: 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .banner {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+    #status {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    #loading {
+      display: none;
+      margin-top: 10px;
+      color: green;
+      font-weight: bold;
+    }
+    ul {
+      margin-top: 20px;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
+      padding: 10px;
+      border-radius: 4px;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to the Mail-Bread</h1>
+
+  <!-- Banner -->
+  <div class="banner">
+    <h1>Welcome to Mail-Bread!</h1>
+  </div>
+
+  <!-- Email Login Form -->
+  <h2>Login to Your Email</h2>
+  <form id="emailForm">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required />
+
+    <label for="imapServer">IMAP Server:</label>
+    <input type="text" id="imapServer" name="imapServer" required />
+
+    <label for="port">Port:</label>
+    <input type="number" id="port" name="port" value="993" required />
+
+    <label for="ssl">SSL:</label>
+    <input type="checkbox" id="ssl" name="ssl" checked />
+
+    <button type="submit">Log In</button>
+  </form>
+
+  <div id="loading">Loading...</div>
+  <div id="status"></div>
+
+  <script src="app.js"></script>
 </body>
 </html>
