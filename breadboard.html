@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breadboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #f8d7b3;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #7a4a00;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .header span.emoji {
+            margin-left: 10px;
+            font-size: 28px;
+        }
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 25%;
+            background-color: #f4f4f4;
+            border-right: 1px solid #ddd;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .email-item {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .email-item:hover {
+            background-color: #f9f9f9;
+        }
+        button.refresh {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button.refresh:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <span>Breadboard</span>
+        <span class="emoji">🍞</span>
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <button class="refresh" onclick="refreshInbox()">Refresh</button>
+            <div id="emailList"></div>
+        </div>
+        <div class="content" id="emailContent">
+            <h2>Select an email to view its content</h2>
+        </div>
+    </div>
+    <script src="breadboard.js"></script>
+</body>
+</html>

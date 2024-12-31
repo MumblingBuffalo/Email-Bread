@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", function () {
             status.textContent = "Login successful!";
             status.style.color = "green";
 
-            // Redirect or load a new page
-            setTimeout(() => {
-                window.location.href = "dashboard.html"; // Replace with the next page
-            }, 1500);
+            // Perform actions on successful login
+            console.log("Logged in with:", { username, server, port, ssl });
 
+            // Redirect to Breadboard
+            window.location.href = "breadboard.html";
         } catch (error) {
             // On failure
             loading.style.display = "none";
