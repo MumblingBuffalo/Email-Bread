@@ -9,17 +9,6 @@
       font-family: Arial, sans-serif;
       margin: 20px;
     }
-    .banner {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-    .banner .emoji {
-      font-size: 30px;
-      vertical-align: middle;
-      margin-left: 10px;
-    }
     label {
       display: block;
       margin-top: 10px;
@@ -31,7 +20,7 @@
       font-size: 14px;
     }
     input[type="checkbox"] {
-      margin-left: 5px;
+      margin-top: 10px;
     }
     button {
       margin-top: 15px;
@@ -45,21 +34,27 @@
     button:hover {
       background-color: #0056b3;
     }
+    .banner {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 30px;
+    }
+    .banner span {
+      margin-left: 5px;
+    }
     #status {
-      margin-top: 15px;
-      font-size: 14px;
+      margin-top: 20px;
       color: green;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
+
   <!-- Banner -->
   <div class="banner">
-    <h1>
-      Welcome to Mail-Bread! 
-      <span class="emoji">🍞</span>
-    </h1>
+    <h1>Welcome to Mail-Bread! <span>🍞</span></h1>
   </div>
 
   <!-- Email Login Form -->
@@ -78,8 +73,7 @@
     <input type="number" id="port" name="port" value="993" required />
 
     <label for="ssl">
-      SSL:
-      <input type="checkbox" id="ssl" name="ssl" checked />
+      <input type="checkbox" id="ssl" name="ssl" checked /> SSL
     </label>
 
     <button type="submit">Log In</button>
