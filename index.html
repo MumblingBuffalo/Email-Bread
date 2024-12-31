@@ -19,9 +19,6 @@
       margin-top: 5px;
       font-size: 14px;
     }
-    input[type="checkbox"] {
-      margin-top: 10px;
-    }
     button {
       margin-top: 15px;
       padding: 10px;
@@ -40,24 +37,22 @@
       font-weight: bold;
       margin-bottom: 30px;
     }
-    .banner span {
-      margin-left: 5px;
+    .show-password {
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
     }
-    #status {
-      margin-top: 20px;
-      color: green;
-      font-weight: bold;
+    .show-password label {
+      margin-left: 10px;
     }
   </style>
 </head>
 <body>
 
-  <!-- Banner -->
   <div class="banner">
-    <h1>Welcome to Mail-Bread! <span>🍞</span></h1>
+    <h1>Welcome to Mail-Bread! 🍞</h1>
   </div>
 
-  <!-- Email Login Form -->
   <h2>Login to Your Email</h2>
   <form id="emailForm">
     <label for="username">Username:</label>
@@ -65,6 +60,10 @@
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required />
+    <div class="show-password">
+      <input type="checkbox" id="showPassword" />
+      <label for="showPassword">Show Password</label>
+    </div>
 
     <label for="imapServer">IMAP Server:</label>
     <input type="text" id="imapServer" name="imapServer" required />
@@ -72,9 +71,8 @@
     <label for="port">Port:</label>
     <input type="number" id="port" name="port" value="993" required />
 
-    <label for="ssl">
-      <input type="checkbox" id="ssl" name="ssl" checked /> SSL
-    </label>
+    <label for="ssl">SSL:</label>
+    <input type="checkbox" id="ssl" name="ssl" checked />
 
     <button type="submit">Log In</button>
   </form>
@@ -82,5 +80,12 @@
   <div id="status"></div>
 
   <script src="app.js"></script>
+  <script>
+    // Toggle password visibility
+    document.getElementById('showPassword').addEventListener('change', function() {
+      const passwordField = document.getElementById('password');
+      passwordField.type = this.checked ? 'text' : 'password';
+    });
+  </script>
 </body>
 </html>
