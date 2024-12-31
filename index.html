@@ -1,91 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mail-Bread</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 10px;
-    }
-    input[type="text"], input[type="password"], input[type="number"] {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      font-size: 14px;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      font-size: 16px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .banner {
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-      margin-bottom: 30px;
-    }
-    .show-password {
-      margin-top: 5px;
-      display: flex;
-      align-items: center;
-    }
-    .show-password label {
-      margin-left: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail-Bread</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .banner {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="text"], input[type="password"], input[type="number"] {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #loading {
+            display: none;
+            color: green;
+            font-weight: bold;
+        }
+        #status {
+            margin-top: 10px;
+            color: red;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="banner">
-    <h1>Welcome to Mail-Bread! 🍞</h1>
-  </div>
-
-  <h2>Login to Your Email</h2>
-  <form id="emailForm">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required />
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required />
-    <div class="show-password">
-      <input type="checkbox" id="showPassword" />
-      <label for="showPassword">Show Password</label>
+    <div class="container">
+        <div class="banner">
+            Welcome to Mail-Bread! <span>🍞</span>
+        </div>
+        <form id="emailForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username">
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password">
+            <div>
+                <input type="checkbox" id="showPassword">
+                <label for="showPassword">Show Password</label>
+            </div>
+            
+            <label for="server">IMAP Server:</label>
+            <input type="text" id="server" name="server" placeholder="imap.example.com">
+            
+            <label for="port">Port:</label>
+            <input type="number" id="port" name="port" placeholder="993" value="993">
+            
+            <label for="ssl">SSL:</label>
+            <input type="checkbox" id="ssl" name="ssl" checked>
+            <label for="ssl">Use SSL</label>
+            
+            <button type="submit">Log In</button>
+        </form>
+        <div id="loading">Loading...</div>
+        <div id="status"></div>
     </div>
-
-    <label for="imapServer">IMAP Server:</label>
-    <input type="text" id="imapServer" name="imapServer" required />
-
-    <label for="port">Port:</label>
-    <input type="number" id="port" name="port" value="993" required />
-
-    <label for="ssl">SSL:</label>
-    <input type="checkbox" id="ssl" name="ssl" checked />
-
-    <button type="submit">Log In</button>
-  </form>
-
-  <div id="status"></div>
-
-  <script src="app.js"></script>
-  <script>
-    // Toggle password visibility
-    document.getElementById('showPassword').addEventListener('change', function() {
-      const passwordField = document.getElementById('password');
-      passwordField.type = this.checked ? 'text' : 'password';
-    });
-  </script>
+    <script src="app.js"></script>
+    <script>
+        // Show password toggle
+        document.getElementById("showPassword").addEventListener("change", function () {
+            const passwordField = document.getElementById("password");
+            passwordField.type = this.checked ? "text" : "password";
+        });
+    </script>
 </body>
 </html>
