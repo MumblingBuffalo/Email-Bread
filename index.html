@@ -5,39 +5,124 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Email-Bread Login</title>
   <link rel="stylesheet" href="breadboard.css">
+  <style>
+    /* Centralized container */
+    .login-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f4f4f4;
+    }
+
+    .login-form-box {
+      background: white;
+      padding: 20px 40px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    h1 {
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    h1 span {
+      font-size: 28px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #333;
+      text-align: left;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .show-password-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ssl-container {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    p#error-message {
+      color: red;
+      font-size: 12px;
+      margin-top: -10px;
+    }
+  </style>
 </head>
 <body>
   <div class="login-container">
-    <h1>Email-Bread <span>🍞</span></h1>
-    <form id="login-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" placeholder="example@domain.com" required>
+    <div class="login-form-box">
+      <h1>Email-Bread <span>🍞</span></h1>
+      <form id="login-form">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="example@domain.com" required>
 
-      <label for="password">Password:</label>
-      <input type="password" id="password" required>
-      <div class="show-password-container">
-        <input type="checkbox" id="show-password">
-        <label for="show-password">Show Password</label>
-      </div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+        <div class="show-password-container">
+          <input type="checkbox" id="show-password">
+          <label for="show-password">Show Password</label>
+        </div>
 
-      <label for="imap-server">IMAP Server:</label>
-      <input type="text" id="imap-server" placeholder="mail.example.com" required>
+        <label for="imap-server">IMAP Server:</label>
+        <input type="text" id="imap-server" placeholder="mail.example.com" required>
 
-      <label for="port">Port:</label>
-      <input type="number" id="port" value="993" required>
+        <label for="port">Port:</label>
+        <input type="number" id="port" value="993" required>
 
-      <div class="ssl-container">
-        <input type="checkbox" id="enable-ssl" checked>
-        <label for="enable-ssl">Enable SSL</label>
-      </div>
+        <div class="ssl-container">
+          <input type="checkbox" id="enable-ssl" checked>
+          <label for="enable-ssl">Enable SSL</label>
+        </div>
 
-      <button type="submit" id="login-button">Log In</button>
-      <p id="error-message"></p>
-    </form>
+        <button type="submit" id="login-button">Log In</button>
+        <p id="error-message"></p>
+      </form>
+    </div>
   </div>
 
   <script>
-    // Toggle visibility of the password
     const showPasswordCheckbox = document.getElementById("show-password");
     const passwordInput = document.getElementById("password");
 
@@ -45,11 +130,10 @@
       passwordInput.type = showPasswordCheckbox.checked ? "text" : "password";
     });
 
-    // Handle login form submission
     const loginForm = document.getElementById("login-form");
 
     loginForm.addEventListener("submit", (e) => {
-      e.preventDefault(); // Prevent default form submission
+      e.preventDefault();
 
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -57,13 +141,11 @@
       const port = document.getElementById("port").value;
       const ssl = document.getElementById("enable-ssl").checked;
 
-      // Store login details locally for the session
       sessionStorage.setItem("email", email);
       sessionStorage.setItem("imapServer", imapServer);
       sessionStorage.setItem("port", port);
       sessionStorage.setItem("ssl", ssl);
 
-      // Navigate to the breadboard
       window.location.href = "breadboard.html";
     });
   </script>
