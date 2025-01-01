@@ -3,37 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Breadboard 🍞</title>
+    <title>Email-Bread - Breadboard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header class="breadboard-header">
-        <h1>Breadboard 🍞</h1>
-        <span id="loggedInUser">Logged in as: [email@example.com]</span>
-    </header>
-
-    <div class="email-container">
-        <aside class="sidebar">
-            <div>
-                <nav class="folder-nav">
-                    <button class="sidebar-button folder-button" id="inboxButton">Inbox</button>
-                    <button class="sidebar-button folder-button" id="outboxButton">Outbox</button>
-                    <button class="sidebar-button folder-button" id="spamButton">Spam</button>
-                    <button class="sidebar-button folder-button" id="trashButton">Burnt Toast</button>
-                </nav>
-                <button class="sidebar-button" id="refreshButton">Refresh</button>
-                <div class="email-list" id="emailList">
-                    <!-- Emails will be dynamically populated here -->
-                </div>
-            </div>
-            <button class="logout-button" id="logoutButton">Logout</button>
-        </aside>
-
-        <main class="email-content" id="emailContent">
-            <h2>Select an email to view its content</h2>
-        </main>
+    <div class="breadboard-header">
+        <h1>Email-Bread 🍞</h1>
+        <button id="refreshButton" class="sidebar-button">Refresh</button>
+        <button id="logoutButton" class="logout-button">Logout</button>
     </div>
-
+    <div class="email-container">
+        <div class="sidebar">
+            <div class="folder-nav">
+                <button class="folder-button" id="inbox">Inbox</button>
+                <button class="folder-button" id="sent">Sent</button>
+                <button class="folder-button" id="spam">Spam</button>
+                <button class="folder-button" id="burnToast">Trash</button>
+            </div>
+        </div>
+        <div class="email-list">
+            <div id="loading" class="loading-message">Refreshing...</div>
+            <div id="noToast" class="no-toast">You Currently Have No Toast</div>
+        </div>
+        <div class="email-content">
+            <h2 id="emailTitle"></h2>
+            <p id="emailBody"></p>
+        </div>
+    </div>
     <script src="breadboard.js"></script>
 </body>
 </html>

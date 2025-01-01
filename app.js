@@ -1,60 +1,70 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("emailForm");
-    const loading = document.getElementById("loading");
-    const status = document.getElementById("status");
+const { app, BrowserWindow, ipcMain } = require("electron");
+const path = require("path");
+const { simpleParser } = require("mailparser");
+const Imap = require("imap");
 
-    form.addEventListener("submit", async function (event) {
-        event.preventDefault(); // Prevent form submission
+let mainWindow;
 
-        // Clear previous status
-        status.textContent = "";
+// Create main window
+app.on("ready", () => {
+    mainWindow = new BrowserWindow({
+        width: 1000,
+        height: 700,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        },
+    });
 
-        // Show the loading message
-        loading.style.display = "block";
+    mainWindow.loadFile("index.html");
+});
 
-        // Collect form data
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-        const server = document.getElementById("server").value.trim();
-        const port = document.getElementById("port").value.trim();
-        const ssl = document.getElementById("ssl").checked;
+// Logout
+ipcMain.on("logout", (event) => {
+    mainWindow.loadFile("index.html");
+});
 
-        // Validate form data
-        if (!username || !password || !server || !port) {
-            loading.style.display = "none"; // Hide loading message
-            status.textContent = "Please fill in all fields.";
-            status.style.color = "red";
-            return;
-        }
+// Get emails
+ipcMain.handle("get-emails", async (event, folder) => {
+    const imap = new Imap({
+        user: "your-email@example.com", // Update with your email
+        password: "your-password", // Update with your password
+        host: "imap.example.com", // Update with your IMAP server
+        port: 993,
+        tls: true,
+    });
 
-        // Simulate a login process (Replace this with actual login logic)
-        try {
-            // Mocking async email login request
-            await new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    // Mock success or failure
-                    Math.random() > 0.3 ? resolve() : reject(new Error("Login failed. Invalid credentials."));
-                }, 2000);
+    return new Promise((resolve, reject) => {
+        imap.once("ready", () => {
+            imap.openBox(folder, true, (err, box) => {
+                if (err) return reject(err);
+
+                const emails = [];
+                const fetch = imap.seq.fetch("1:*", { bodies: "" });
+
+                fetch.on("message", (msg) => {
+                    msg.on("body", (stream) => {
+                        simpleParser(stream, (err, parsed) => {
+                            if (!err) {
+                                emails.push({
+                                    subject: parsed.subject,
+                                    from: parsed.from.text,
+                                    date: parsed.date,
+                                    body: parsed.text,
+                                });
+                            }
+                        });
+                    });
+                });
+
+                fetch.once("end", () => {
+                    imap.end();
+                    resolve(emails);
+                });
             });
+        });
 
-            // On success
-            loading.style.display = "none";
-            status.textContent = "Login successful!";
-            status.style.color = "green";
-
-            // Save session data
-            sessionStorage.setItem(
-                "userSession",
-                JSON.stringify({ username, password, server, port, ssl })
-            );
-
-            // Redirect to Breadboard
-            window.location.href = "breadboard.html";
-        } catch (error) {
-            // On failure
-            loading.style.display = "none";
-            status.textContent = error.message;
-            status.style.color = "red";
-        }
+        imap.once("error", (err) => reject(err));
+        imap.connect();
     });
 });

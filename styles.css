@@ -75,6 +75,27 @@ body {
     background-color: #0056b3;
 }
 
+.folder-nav {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.folder-button {
+    background-color: #e8e8e8;
+    color: #333;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    text-align: left;
+}
+
+.folder-button:hover {
+    background-color: #d6d6d6;
+}
+
 .email-list {
     flex-grow: 1;
     overflow-y: auto;
@@ -209,30 +230,11 @@ body {
     font-size: 14px;
     font-weight: bold;
 }
+
+/* "No Toast" Message */
 .no-toast {
     font-size: 14px;
     color: #999;
     text-align: center;
     margin-top: 20px;
-}
-
-.folder-nav {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.folder-button {
-    background-color: #e8e8e8;
-    color: #333;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    text-align: left;
-}
-
-.folder-button:hover {
-    background-color: #d6d6d6;
 }

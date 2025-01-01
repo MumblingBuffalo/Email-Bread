@@ -1,97 +1,70 @@
-document.addEventListener("DOMContentLoaded", function () {
+const { ipcRenderer } = require("electron");
+
+document.addEventListener("DOMContentLoaded", () => {
     const refreshButton = document.getElementById("refreshButton");
     const logoutButton = document.getElementById("logoutButton");
-    const emailList = document.getElementById("emailList");
-    const emailContent = document.getElementById("emailContent");
-    const loggedInUser = document.getElementById("loggedInUser");
     const folderButtons = document.querySelectorAll(".folder-button");
 
-    const userEmail = localStorage.getItem("loggedInUserEmail") || "unknown@example.com";
+    // Default to Inbox on load
+    let currentFolder = "inbox";
+    loadEmails(currentFolder);
 
-    // Display logged-in user
-    if (loggedInUser) {
-        loggedInUser.textContent = `Logged in as: ${userEmail}`;
-    }
-
-    // Update folder
-    function updateFolder(folderName) {
-        console.log(`Switched to folder: ${folderName}`);
-        fetchEmails(folderName);
-    }
-
-    folderButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-            updateFolder(button.id.replace("Button", ""));
+    // Handle folder switching
+    folderButtons.forEach(button => {
+        button.addEventListener("click", (event) => {
+            currentFolder = event.target.id;
+            loadEmails(currentFolder);
         });
     });
-
-    // Fetch emails
-    async function fetchEmails(folder = "inbox") {
-        emailList.innerHTML = "<p>Refreshing...</p>";
-        try {
-            const emails = await fetchMockEmails(folder);
-            emailList.innerHTML = "";
-
-            if (emails.length === 0) {
-                emailList.innerHTML = `<p class="no-toast">You Currently Have No Toast</p>`;
-            } else {
-                emails.forEach((email) => {
-                    const emailItem = document.createElement("div");
-                    emailItem.className = "email-list-item";
-                    emailItem.innerHTML = `
-                        <div class="email-title">${email.subject}</div>
-                        <div class="email-meta">${email.sender} - ${email.time}</div>
-                    `;
-                    emailItem.addEventListener("click", () => {
-                        displayEmailContent(email);
-                    });
-                    emailList.appendChild(emailItem);
-                });
-            }
-        } catch (error) {
-            console.error("Failed to fetch emails:", error);
-            emailList.innerHTML = "<p>Error fetching emails</p>";
-        }
-    }
-
-    async function fetchMockEmails(folder) {
-        // Mock email fetching logic for different folders
-        const emailData = {
-            inbox: [
-                { subject: "Welcome!", sender: "admin@example.com", time: "10:30 AM", body: "Welcome to Mail-Bread!" },
-            ],
-            outbox: [],
-            spam: [],
-            trash: [],
-        };
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                resolve(emailData[folder] || []);
-            }, 1000);
-        });
-    }
-
-    // Display email content
-    function displayEmailContent(email) {
-        emailContent.innerHTML = `
-            <h2>${email.subject}</h2>
-            <p><strong>From:</strong> ${email.sender}</p>
-            <p><strong>Time:</strong> ${email.time}</p>
-            <p>${email.body}</p>
-        `;
-    }
 
     // Refresh emails
     refreshButton.addEventListener("click", () => {
-        fetchEmails();
+        toggleLoading(true);
+        loadEmails(currentFolder);
     });
 
-    // Logout
+    // Logout functionality
     logoutButton.addEventListener("click", () => {
-        localStorage.removeItem("loggedInUserEmail");
-        window.location.href = "index.html";
+        ipcRenderer.send("logout");
     });
 
-    // Initial fetch
-    fetchEmails();
+    // Fetch emails for a folder
+    async function loadEmails(folder) {
+        toggleLoading(true);
+
+        const emails = await ipcRenderer.invoke("get-emails", folder);
+
+        toggleLoading(false);
+
+        const emailList = document.querySelector(".email-list");
+        emailList.innerHTML = ""; // Clear current emails
+
+        if (emails.length === 0) {
+            document.getElementById("noToast").style.display = "block";
+        } else {
+            document.getElementById("noToast").style.display = "none";
+            emails.forEach(email => {
+                const emailItem = document.createElement("div");
+                emailItem.classList.add("email-list-item");
+                emailItem.innerHTML = `
+                    <div class="email-title">${email.subject}</div>
+                    <div class="email-meta">${email.from} - ${email.date}</div>
+                `;
+                emailItem.addEventListener("click", () => displayEmail(email));
+                emailList.appendChild(emailItem);
+            });
+        }
+    }
+
+    // Show email content
+    function displayEmail(email) {
+        document.getElementById("emailTitle").textContent = email.subject;
+        document.getElementById("emailBody").textContent = email.body;
+    }
+
+    // Toggle loading indicator
+    function toggleLoading(isLoading) {
+        const loadingIndicator = document.getElementById("loading");
+        loadingIndicator.style.display = isLoading ? "block" : "none";
+    }
 });
