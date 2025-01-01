@@ -1,25 +1,27 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BreadBoard 🥖</title>
-  <link rel="stylesheet" href="breadboard.css">
+  <link rel="stylesheet" href="styles.css">
+  <title>Breadboard 🍞</title>
 </head>
 <body>
-  <header>
-    <h1>BreadBoard 🥖</h1>
-    <div id="user-info">
-      Logged in as: <span id="logged-in-email"></span>
-      <button id="logout-btn">Logout</button>
-    </div>
-    <div id="search-container">
-      <input type="text" id="search-input" placeholder="Search emails..." />
-    </div>
+  <header class="header">
+    <h1>Breadboard <span>🍞</span></h1>
+    <span id="logged-in-email">Logged in as: user@example.com</span>
+    <button id="logout-btn">Logout</button>
   </header>
   <main>
-    <aside id="folder-buttons"></aside>
-    <section id="email-list">
-      <p>Loading emails...</p>
+    <aside class="sidebar">
+      <button class="folder-btn" data-folder="INBOX">Inbox</button>
+      <button class="folder-btn" data-folder="OUTBOX">Outbox</button>
+      <button class="folder-btn" data-folder="SENT">Sent</button>
+      <button class="folder-btn" data-folder="TRASH">(Burnt Toast)</button>
+      <button id="refresh-btn">Refresh</button>
+    </aside>
+    <section class="email-view">
+      <div id="email-list"></div>
     </section>
   </main>
   <script src="breadboard.js"></script>

@@ -3,83 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
   <title>Email-Bread Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    #login-container {
-      background-color: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      width: 300px;
-    }
-    #login-container h1 {
-      text-align: center;
-      font-size: 24px;
-    }
-    input, button {
-      width: 100%;
-      margin: 10px 0;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
 </head>
 <body>
-  <div id="login-container">
-    <h1>Login</h1>
-    <input type="text" id="email" placeholder="Email Address" />
-    <input type="password" id="password" placeholder="Password" />
-    <input type="text" id="imap-server" placeholder="IMAP Server (e.g., imap.example.com)" />
-    <input type="number" id="port" placeholder="Port (default: 993)" value="993" />
-    <label>
-      <input type="checkbox" id="ssl" checked /> Use SSL
-    </label>
-    <button id="login-btn">Login</button>
+  <div class="login-container">
+    <h1>Email-Bread <span>🍞</span></h1>
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div class="checkbox">
+          <input type="checkbox" id="show-password">
+          <label for="show-password">Show Password</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="imap-server">IMAP Server:</label>
+        <input type="text" id="imap-server" value="mail.example.com" required>
+      </div>
+      <div class="form-group">
+        <label for="port">Port:</label>
+        <input type="number" id="port" value="993" required>
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <input type="checkbox" id="enable-ssl" checked>
+          <label for="enable-ssl">Enable SSL</label>
+        </div>
+      </div>
+      <button type="submit" id="login-btn">Log In</button>
+      <p id="error-message" class="error"></p>
+    </form>
   </div>
-
-  <script>
-    document.getElementById("login-btn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const imapServer = document.getElementById("imap-server").value;
-      const port = document.getElementById("port").value || "993";
-      const ssl = document.getElementById("ssl").checked;
-
-      if (!email || !password || !imapServer) {
-        alert("Please fill in all fields.");
-        return;
-      }
-
-      // Store credentials in sessionStorage for Breadboard
-      sessionStorage.setItem("email", email);
-      sessionStorage.setItem("password", password);
-      sessionStorage.setItem("imapServer", imapServer);
-      sessionStorage.setItem("port", port);
-      sessionStorage.setItem("ssl", ssl);
-
-      window.location.href = "breadboard.html";
-    });
-  </script>
+  <script src="index.js"></script>
 </body>
 </html>

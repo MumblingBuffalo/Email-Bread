@@ -1,95 +1,34 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background-color: #f8f9fa;
 }
 
-h1 {
-    font-size: 24px;
-    text-align: center;
+h1 span {
+  font-size: 1.2em;
 }
 
-.form-container {
-    max-width: 400px;
-    margin: 50px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.login-container,
+.header {
+  background-color: #ffcc80;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+form {
+  margin: 0 auto;
+  max-width: 300px;
+  padding: 20px;
 }
 
 input, button {
-    width: 100%;
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-sizing: border-box;
+  font-size: 14px;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
-button {
-    background-color: #007bff;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-.hidden {
-    display: none;
-}
-
-.breadboard-layout {
-    display: flex;
-    height: 100vh;
-}
-
-aside {
-    width: 200px;
-    background: #343a40;
-    color: white;
-    display: flex;
-    flex-direction: column;
-}
-
-aside button {
-    background: none;
-    border: none;
-    padding: 15px;
-    color: white;
-    text-align: left;
-    cursor: pointer;
-}
-
-aside button:hover {
-    background-color: #495057;
-}
-
-main {
-    flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-#email-list {
-    list-style: none;
-    padding: 0;
-}
-
-#email-list li {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-}
-
-header {
-    background: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.sidebar button {
+  background-color: #007bff;
+  color: white;
 }
