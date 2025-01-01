@@ -1,66 +1,41 @@
-// Wait for the DOM to fully load
-document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("emailForm");
-    const showPasswordCheckbox = document.getElementById("showPassword");
-    const passwordField = document.getElementById("password");
-    const loadingMessage = document.getElementById("loading");
-    const statusMessage = document.getElementById("status");
+document.getElementById('emailForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-    // Show password functionality
-    showPasswordCheckbox.addEventListener("change", () => {
-        if (showPasswordCheckbox.checked) {
-            passwordField.type = "text";
-        } else {
-            passwordField.type = "password";
-        }
-    });
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const server = document.getElementById('server').value;
+    const port = document.getElementById('port').value;
+    const ssl = document.getElementById('ssl').checked;
 
-    // Handle form submission
-    loginForm.addEventListener("submit", async (event) => {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
-        loadingMessage.style.display = "block"; // Show the loading message
-        statusMessage.textContent = ""; // Clear any previous status message
+    // Display loading message
+    const loadingMessage = document.getElementById('loading');
+    loadingMessage.style.display = 'block';
+    loadingMessage.textContent = 'Loading...';
 
-        // Collect form data
-        const email = document.getElementById("username").value;
-        const password = passwordField.value;
-        const imapServer = document.getElementById("server").value;
-        const port = document.getElementById("port").value;
-        const ssl = document.getElementById("ssl").checked;
-
-        if (!email || !password || !imapServer || !port) {
-            loadingMessage.style.display = "none";
-            statusMessage.textContent = "All fields are required!";
-            return;
-        }
-
-        try {
-            // Simulate a login API call (replace with actual logic)
-            const loginResponse = await fakeLoginAPI(email, password, imapServer, port, ssl);
-
-            if (loginResponse.success) {
-                // Redirect to the breadboard/dashboard
-                window.location.href = "breadboard.html";
-            } else {
-                throw new Error(loginResponse.message);
-            }
-        } catch (error) {
-            statusMessage.textContent = `Login failed: ${error.message}`;
-        } finally {
-            loadingMessage.style.display = "none";
-        }
-    });
-
-    // Mock login function (Replace this with your actual backend API call)
-    function fakeLoginAPI(email, password, imapServer, port, ssl) {
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                if (email === "test@example.com" && password === "password123") {
-                    resolve({ success: true });
-                } else {
-                    resolve({ success: false, message: "Invalid credentials or server error." });
-                }
-            }, 2000); // Simulate a delay for API response
+    try {
+        const response = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, server, port, ssl })
         });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            window.location.href = 'breadboard.html';
+        } else {
+            throw new Error(result.message || 'Invalid credentials or server error.');
+        }
+    } catch (error) {
+        document.getElementById('status').textContent = `Login failed: ${error.message}`;
+        console.error('Login error:', error);
+    } finally {
+        loadingMessage.style.display = 'none';
     }
+});
+
+// Password visibility toggle
+document.getElementById('showPassword').addEventListener('change', function () {
+    const passwordField = document.getElementById('password');
+    passwordField.type = this.checked ? 'text' : 'password';
 });
