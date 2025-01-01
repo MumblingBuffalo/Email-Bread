@@ -1,70 +1,128 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer } = require('electron');
 
-document.addEventListener("DOMContentLoaded", () => {
-    const refreshButton = document.getElementById("refreshButton");
-    const logoutButton = document.getElementById("logoutButton");
-    const folderButtons = document.querySelectorAll(".folder-button");
+// Elements
+const refreshButton = document.getElementById('refreshButton');
+const logoutButton = document.getElementById('logoutButton');
+const folderButtons = document.querySelectorAll('.folder-button');
+const emailList = document.querySelector('.email-list');
+const searchInput = document.querySelector('.search-bar');
+const emailContent = document.querySelector('.email-content');
+const loggedInUserElement = document.getElementById('loggedInUser');
 
-    // Default to Inbox on load
-    let currentFolder = "inbox";
-    loadEmails(currentFolder);
+// State
+let currentFolder = 'inbox'; // Default folder
 
-    // Handle folder switching
-    folderButtons.forEach(button => {
-        button.addEventListener("click", (event) => {
-            currentFolder = event.target.id;
-            loadEmails(currentFolder);
-        });
-    });
+// Utility to display loading
+const setLoadingState = (loading) => {
+    refreshButton.textContent = loading ? 'Refreshing...' : 'Refresh';
+    refreshButton.disabled = loading;
+};
 
-    // Refresh emails
-    refreshButton.addEventListener("click", () => {
-        toggleLoading(true);
-        loadEmails(currentFolder);
-    });
-
-    // Logout functionality
-    logoutButton.addEventListener("click", () => {
-        ipcRenderer.send("logout");
-    });
-
-    // Fetch emails for a folder
-    async function loadEmails(folder) {
-        toggleLoading(true);
-
-        const emails = await ipcRenderer.invoke("get-emails", folder);
-
-        toggleLoading(false);
-
-        const emailList = document.querySelector(".email-list");
-        emailList.innerHTML = ""; // Clear current emails
-
-        if (emails.length === 0) {
-            document.getElementById("noToast").style.display = "block";
+// Utility to update folder active state
+const updateActiveFolder = () => {
+    folderButtons.forEach((button) => {
+        if (button.dataset.folder === currentFolder) {
+            button.classList.add('active');
         } else {
-            document.getElementById("noToast").style.display = "none";
-            emails.forEach(email => {
-                const emailItem = document.createElement("div");
-                emailItem.classList.add("email-list-item");
-                emailItem.innerHTML = `
-                    <div class="email-title">${email.subject}</div>
-                    <div class="email-meta">${email.from} - ${email.date}</div>
-                `;
-                emailItem.addEventListener("click", () => displayEmail(email));
-                emailList.appendChild(emailItem);
-            });
+            button.classList.remove('active');
         }
+    });
+};
+
+// Fetch emails for the current folder
+const fetchEmails = async () => {
+    setLoadingState(true);
+
+    try {
+        const emails = await ipcRenderer.invoke('fetch-emails', currentFolder);
+        renderEmails(emails);
+    } catch (error) {
+        console.error('Error fetching emails:', error);
+        alert('Failed to fetch emails. Please try again.');
+    } finally {
+        setLoadingState(false);
+    }
+};
+
+// Render emails
+const renderEmails = (emails) => {
+    emailList.innerHTML = '';
+
+    if (emails.length === 0) {
+        const noToastMessage = document.createElement('div');
+        noToastMessage.className = 'no-toast';
+        noToastMessage.textContent = 'You Currently Have No Toast';
+        emailList.appendChild(noToastMessage);
+        return;
     }
 
-    // Show email content
-    function displayEmail(email) {
-        document.getElementById("emailTitle").textContent = email.subject;
-        document.getElementById("emailBody").textContent = email.body;
-    }
+    emails.forEach((email) => {
+        const emailItem = document.createElement('div');
+        emailItem.className = 'email-list-item';
+        emailItem.innerHTML = `
+            <div class="email-title">${email.subject}</div>
+            <div class="email-meta">From: ${email.from}</div>
+        `;
+        emailItem.addEventListener('click', () => displayEmailContent(email));
+        emailList.appendChild(emailItem);
+    });
+};
 
-    // Toggle loading indicator
-    function toggleLoading(isLoading) {
-        const loadingIndicator = document.getElementById("loading");
-        loadingIndicator.style.display = isLoading ? "block" : "none";
+// Display email content
+const displayEmailContent = (email) => {
+    emailContent.innerHTML = `
+        <h2>${email.subject}</h2>
+        <p><strong>From:</strong> ${email.from}</p>
+        <p>${email.body}</p>
+    `;
+};
+
+// Event: Refresh button
+refreshButton.addEventListener('click', () => {
+    fetchEmails();
+});
+
+// Event: Logout button
+logoutButton.addEventListener('click', () => {
+    ipcRenderer.send('logout');
+});
+
+// Event: Folder buttons
+folderButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        const folder = button.dataset.folder;
+        if (folder !== currentFolder) {
+            currentFolder = folder;
+            updateActiveFolder();
+            fetchEmails();
+        }
+    });
+});
+
+// Event: Search bar
+searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    const emailItems = document.querySelectorAll('.email-list-item');
+
+    emailItems.forEach((item) => {
+        const title = item.querySelector('.email-title').textContent.toLowerCase();
+        const meta = item.querySelector('.email-meta').textContent.toLowerCase();
+
+        if (title.includes(searchTerm) || meta.includes(searchTerm)) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+
+// Set logged-in user
+ipcRenderer.invoke('get-user-info').then((userInfo) => {
+    if (userInfo && userInfo.email) {
+        loggedInUserElement.textContent = `Currently Logged In As: ${userInfo.email}`;
     }
 });
+
+// Initial fetch
+updateActiveFolder();
+fetchEmails();

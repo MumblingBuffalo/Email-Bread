@@ -32,43 +32,15 @@
                     <input type="checkbox" id="ssl" name="ssl" checked> Enable SSL
                 </label>
             </div>
+            <div class="form-group">
+                <label for="smtp-server">SMTP Server:</label>
+                <input type="text" id="smtp-server" name="smtp-server" placeholder="smtp.example.com" disabled>
+            </div>
             <button type="submit" class="submit-button">Log In</button>
         </form>
         <div id="loading" class="loading-message">Loading...</div>
         <div id="status" class="status-message"></div>
     </div>
-    <script>
-        // Handle form submission
-        document.getElementById("emailForm").addEventListener("submit", (event) => {
-            event.preventDefault();
-
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            const server = document.getElementById("server").value;
-            const port = document.getElementById("port").value;
-            const ssl = document.getElementById("ssl").checked;
-
-            // Show loading indicator
-            document.getElementById("loading").style.display = "block";
-            document.getElementById("status").textContent = "";
-
-            // Simulate login process (replace with actual implementation later)
-            setTimeout(() => {
-                document.getElementById("loading").style.display = "none";
-                if (username && password && server && port) {
-                    document.getElementById("status").textContent = "Login successful!";
-                    window.location.href = "./breadboard.html";
-                } else {
-                    document.getElementById("status").textContent = "Please fill in all fields.";
-                }
-            }, 1000);
-        });
-
-        // Toggle password visibility
-        document.getElementById("showPassword").addEventListener("change", (event) => {
-            const passwordField = document.getElementById("password");
-            passwordField.type = event.target.checked ? "text" : "password";
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
