@@ -1,110 +1,97 @@
-const imap = require('imap-simple');
+document.addEventListener("DOMContentLoaded", function () {
+    const refreshButton = document.getElementById("refreshButton");
+    const logoutButton = document.getElementById("logoutButton");
+    const emailList = document.getElementById("emailList");
+    const emailContent = document.getElementById("emailContent");
+    const loggedInUser = document.getElementById("loggedInUser");
+    const folderButtons = document.querySelectorAll(".folder-button");
 
-let userSession = null; // Holds session data for the logged-in user
-
-// Function to initialize IMAP connection
-async function initializeIMAP(username, password, server, port, ssl) {
-    const config = {
-        imap: {
-            user: username,
-            password: password,
-            host: server,
-            port: parseInt(port),
-            tls: ssl,
-            authTimeout: 3000
-        }
-    };
-
-    return await imap.connect(config);
-}
-
-// Fetch emails
-async function fetchEmails(imapConnection) {
-    try {
-        await imapConnection.openBox('INBOX');
-        const searchCriteria = ['ALL'];
-        const fetchOptions = { bodies: ['HEADER', 'TEXT'], struct: true };
-        const messages = await imapConnection.search(searchCriteria, fetchOptions);
-
-        // Map messages to a simpler format
-        return messages.map(msg => {
-            const parts = imap.getParts(msg.attributes.struct);
-            const headers = imap.parseHeader(msg.parts.find(part => part.which === 'HEADER').body);
-            return {
-                subject: headers.subject ? headers.subject[0] : 'No Subject',
-                from: headers.from ? headers.from[0] : 'Unknown Sender',
-                date: headers.date ? headers.date[0] : 'Unknown Date',
-                body: parts.find(part => part.disposition === null)?.body || 'No content available'
-            };
-        });
-    } catch (error) {
-        console.error('Error fetching emails:', error);
-        return [];
-    }
-}
-
-// Display emails on the Breadboard
-function displayEmails(emails) {
-    const emailList = document.getElementById('emailList');
-    emailList.innerHTML = ''; // Clear the list
-
-    emails.forEach(email => {
-        const listItem = document.createElement('div');
-        listItem.className = 'email-list-item';
-        listItem.innerHTML = `
-            <div class="email-title">${email.subject}</div>
-            <div class="email-meta">From: ${email.from} | Sent: ${email.date}</div>
-        `;
-
-        listItem.addEventListener('click', () => {
-            const emailContent = document.getElementById('emailContent');
-            emailContent.innerHTML = `
-                <h2>${email.subject}</h2>
-                <p><strong>From:</strong> ${email.from}</p>
-                <p><strong>Sent:</strong> ${email.date}</p>
-                <p>${email.body}</p>
-            `;
-        });
-
-        emailList.appendChild(listItem);
-    });
-}
-
-// Initialize the Breadboard page
-async function initializeBreadboard() {
-    const refreshButton = document.getElementById('refreshButton');
-    const logoutButton = document.getElementById('logoutButton');
-
-    // Fetch session info
-    userSession = JSON.parse(sessionStorage.getItem('userSession'));
-
-    if (!userSession) {
-        alert('No active session. Redirecting to login page.');
-        window.location.href = 'index.html';
-        return;
-    }
+    const userEmail = localStorage.getItem("loggedInUserEmail") || "unknown@example.com";
 
     // Display logged-in user
-    const loggedInUser = document.getElementById('loggedInUser');
-    loggedInUser.textContent = `Logged in as: ${userSession.username}`;
+    if (loggedInUser) {
+        loggedInUser.textContent = `Logged in as: ${userEmail}`;
+    }
 
-    // Initialize IMAP and load emails
-    const imapConnection = await initializeIMAP(userSession.username, userSession.password, userSession.server, userSession.port, userSession.ssl);
-    const emails = await fetchEmails(imapConnection);
-    displayEmails(emails);
+    // Update folder
+    function updateFolder(folderName) {
+        console.log(`Switched to folder: ${folderName}`);
+        fetchEmails(folderName);
+    }
 
-    // Add refresh functionality
-    refreshButton.addEventListener('click', async () => {
-        const emails = await fetchEmails(imapConnection);
-        displayEmails(emails);
+    folderButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+            updateFolder(button.id.replace("Button", ""));
+        });
     });
 
-    // Add logout functionality
-    logoutButton.addEventListener('click', () => {
-        sessionStorage.removeItem('userSession');
-        window.location.href = 'index.html';
-    });
-}
+    // Fetch emails
+    async function fetchEmails(folder = "inbox") {
+        emailList.innerHTML = "<p>Refreshing...</p>";
+        try {
+            const emails = await fetchMockEmails(folder);
+            emailList.innerHTML = "";
 
-// Start the Breadboard initialization on page load
-document.addEventListener('DOMContentLoaded', initializeBreadboard);
+            if (emails.length === 0) {
+                emailList.innerHTML = `<p class="no-toast">You Currently Have No Toast</p>`;
+            } else {
+                emails.forEach((email) => {
+                    const emailItem = document.createElement("div");
+                    emailItem.className = "email-list-item";
+                    emailItem.innerHTML = `
+                        <div class="email-title">${email.subject}</div>
+                        <div class="email-meta">${email.sender} - ${email.time}</div>
+                    `;
+                    emailItem.addEventListener("click", () => {
+                        displayEmailContent(email);
+                    });
+                    emailList.appendChild(emailItem);
+                });
+            }
+        } catch (error) {
+            console.error("Failed to fetch emails:", error);
+            emailList.innerHTML = "<p>Error fetching emails</p>";
+        }
+    }
+
+    async function fetchMockEmails(folder) {
+        // Mock email fetching logic for different folders
+        const emailData = {
+            inbox: [
+                { subject: "Welcome!", sender: "admin@example.com", time: "10:30 AM", body: "Welcome to Mail-Bread!" },
+            ],
+            outbox: [],
+            spam: [],
+            trash: [],
+        };
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                resolve(emailData[folder] || []);
+            }, 1000);
+        });
+    }
+
+    // Display email content
+    function displayEmailContent(email) {
+        emailContent.innerHTML = `
+            <h2>${email.subject}</h2>
+            <p><strong>From:</strong> ${email.sender}</p>
+            <p><strong>Time:</strong> ${email.time}</p>
+            <p>${email.body}</p>
+        `;
+    }
+
+    // Refresh emails
+    refreshButton.addEventListener("click", () => {
+        fetchEmails();
+    });
+
+    // Logout
+    logoutButton.addEventListener("click", () => {
+        localStorage.removeItem("loggedInUserEmail");
+        window.location.href = "index.html";
+    });
+
+    // Initial fetch
+    fetchEmails();
+});

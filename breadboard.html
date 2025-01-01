@@ -9,17 +9,26 @@
 <body>
     <header class="breadboard-header">
         <h1>Breadboard 🍞</h1>
-        <span id="loggedInUser"></span>
+        <span id="loggedInUser">Logged in as: [email@example.com]</span>
     </header>
 
     <div class="email-container">
         <aside class="sidebar">
-            <button class="sidebar-button" id="refreshButton">Refresh</button>
-            <div class="email-list" id="emailList">
-                <!-- Emails will be dynamically populated here -->
+            <div>
+                <nav class="folder-nav">
+                    <button class="sidebar-button folder-button" id="inboxButton">Inbox</button>
+                    <button class="sidebar-button folder-button" id="outboxButton">Outbox</button>
+                    <button class="sidebar-button folder-button" id="spamButton">Spam</button>
+                    <button class="sidebar-button folder-button" id="trashButton">Burnt Toast</button>
+                </nav>
+                <button class="sidebar-button" id="refreshButton">Refresh</button>
+                <div class="email-list" id="emailList">
+                    <!-- Emails will be dynamically populated here -->
+                </div>
             </div>
             <button class="logout-button" id="logoutButton">Logout</button>
         </aside>
+
         <main class="email-content" id="emailContent">
             <h2>Select an email to view its content</h2>
         </main>
