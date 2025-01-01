@@ -1,0 +1,97 @@
+obody {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+#email-info {
+    font-size: 16px;
+}
+
+#search-container {
+    flex-grow: 1;
+    text-align: center;
+}
+
+#search-input {
+    width: 70%;
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#logout-btn {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#logout-btn:hover {
+    background-color: #cc0000;
+}
+
+main {
+    display: flex;
+    height: calc(100vh - 50px);
+}
+
+#folder-buttons {
+    width: 20%;
+    background-color: #333;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#folder-buttons button {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px 5px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#folder-buttons button:hover {
+    background-color: #444;
+}
+
+#email-list {
+    width: 80%;
+    padding: 20px;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.email-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.email-item strong {
+    display: block;
+    font-size: 18px;
+}
+
+.email-item small {
+    color: #555;
+}

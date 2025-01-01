@@ -3,22 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email-Bread</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="breadboard.css">
+    <title>Email-Bread - Login</title>
 </head>
 <body>
-    <div id="login-page" class="form-container">
-        <h1>Email-Bread <span>🍞</span></h1>
+    <div class="login-container">
+        <h1>Email-Bread 🍞</h1>
         <form id="login-form">
             <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="yourname@example.com" required>
+            <input type="email" id="email" placeholder="email@example.com" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter your password" required>
-            <div>
-                <input type="checkbox" id="show-password">
-                <label for="show-password">Show Password</label>
-            </div>
+            <input type="password" id="password" placeholder="Enter password" required>
 
             <label for="imap-server">IMAP Server:</label>
             <input type="text" id="imap-server" placeholder="imap.example.com" required>
@@ -26,41 +22,41 @@
             <label for="port">Port:</label>
             <input type="number" id="port" value="993" required>
 
+            <label for="smtp-server">SMTP Server:</label>
+            <input type="text" id="smtp-server" placeholder="smtp.example.com" required>
+
             <div>
-                <input type="checkbox" id="ssl" checked>
-                <label for="ssl">Enable SSL</label>
+                <input type="checkbox" id="enable-ssl" checked>
+                <label for="enable-ssl">Enable SSL</label>
             </div>
 
-            <label for="smtp-server">SMTP Server:</label>
-            <input type="text" id="smtp-server" placeholder="smtp.example.com" disabled>
-
             <button type="submit">Log In</button>
-            <div id="status"></div>
         </form>
     </div>
 
-    <div id="breadboard" class="hidden">
-        <header>
-            <h1>Email-Bread <span>🍞</span></h1>
-            <button id="logout">Logout</button>
-        </header>
-        <div class="breadboard-layout">
-            <aside>
-                <button class="folder-btn" data-folder="inbox">Inbox</button>
-                <button class="folder-btn" data-folder="sent">Sent</button>
-                <button class="folder-btn" data-folder="spam">Spam</button>
-                <button class="folder-btn" data-folder="trash">Trash</button>
-            </aside>
-            <main>
-                <button id="refresh">Refresh</button>
-                <h2 id="folder-name">Inbox</h2>
-                <ul id="email-list">
-                    <li>No emails yet...</li>
-                </ul>
-            </main>
-        </div>
-    </div>
+    <script>
+        document.getElementById("login-form").addEventListener("submit", (e) => {
+            e.preventDefault();
 
-    <script src="app.js"></script>
+            // Capture user input
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const imapServer = document.getElementById("imap-server").value;
+            const port = document.getElementById("port").value;
+            const smtpServer = document.getElementById("smtp-server").value;
+            const enableSSL = document.getElementById("enable-ssl").checked;
+
+            // Store details in sessionStorage for use in other parts of the app
+            sessionStorage.setItem("email", email);
+            sessionStorage.setItem("password", password);
+            sessionStorage.setItem("imapServer", imapServer);
+            sessionStorage.setItem("port", port);
+            sessionStorage.setItem("smtpServer", smtpServer);
+            sessionStorage.setItem("enableSSL", enableSSL);
+
+            // Redirect to the breadboard page
+            window.location.href = "breadboard.html";
+        });
+    </script>
 </body>
 </html>
