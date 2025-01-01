@@ -1,62 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="breadboard.css">
-    <title>Email-Bread - Login</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email-Bread Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #login-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+    #login-container h1 {
+      text-align: center;
+      font-size: 24px;
+    }
+    input, button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <h1>Email-Bread 🍞</h1>
-        <form id="login-form">
-            <label for="email">Email:</label>
-            <input type="email" id="email" placeholder="email@example.com" required>
+  <div id="login-container">
+    <h1>Login</h1>
+    <input type="text" id="email" placeholder="Email Address" />
+    <input type="password" id="password" placeholder="Password" />
+    <input type="text" id="imap-server" placeholder="IMAP Server (e.g., imap.example.com)" />
+    <input type="number" id="port" placeholder="Port (default: 993)" value="993" />
+    <label>
+      <input type="checkbox" id="ssl" checked /> Use SSL
+    </label>
+    <button id="login-btn">Login</button>
+  </div>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" placeholder="Enter password" required>
+  <script>
+    document.getElementById("login-btn").addEventListener("click", () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const imapServer = document.getElementById("imap-server").value;
+      const port = document.getElementById("port").value || "993";
+      const ssl = document.getElementById("ssl").checked;
 
-            <label for="imap-server">IMAP Server:</label>
-            <input type="text" id="imap-server" placeholder="imap.example.com" required>
+      if (!email || !password || !imapServer) {
+        alert("Please fill in all fields.");
+        return;
+      }
 
-            <label for="port">Port:</label>
-            <input type="number" id="port" value="993" required>
+      // Store credentials in sessionStorage for Breadboard
+      sessionStorage.setItem("email", email);
+      sessionStorage.setItem("password", password);
+      sessionStorage.setItem("imapServer", imapServer);
+      sessionStorage.setItem("port", port);
+      sessionStorage.setItem("ssl", ssl);
 
-            <label for="smtp-server">SMTP Server:</label>
-            <input type="text" id="smtp-server" placeholder="smtp.example.com" required>
-
-            <div>
-                <input type="checkbox" id="enable-ssl" checked>
-                <label for="enable-ssl">Enable SSL</label>
-            </div>
-
-            <button type="submit">Log In</button>
-        </form>
-    </div>
-
-    <script>
-        document.getElementById("login-form").addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            // Capture user input
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const imapServer = document.getElementById("imap-server").value;
-            const port = document.getElementById("port").value;
-            const smtpServer = document.getElementById("smtp-server").value;
-            const enableSSL = document.getElementById("enable-ssl").checked;
-
-            // Store details in sessionStorage for use in other parts of the app
-            sessionStorage.setItem("email", email);
-            sessionStorage.setItem("password", password);
-            sessionStorage.setItem("imapServer", imapServer);
-            sessionStorage.setItem("port", port);
-            sessionStorage.setItem("smtpServer", smtpServer);
-            sessionStorage.setItem("enableSSL", enableSSL);
-
-            // Redirect to the breadboard page
-            window.location.href = "breadboard.html";
-        });
-    </script>
+      window.location.href = "breadboard.html";
+    });
+  </script>
 </body>
 </html>

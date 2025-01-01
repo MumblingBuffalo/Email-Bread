@@ -1,27 +1,27 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="breadboard.css">
-    <title>Email-Bread - Breadboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BreadBoard 🥖</title>
+  <link rel="stylesheet" href="breadboard.css">
 </head>
 <body>
-    <header>
-        <div id="email-info">
-            <span id="logged-in-email">Loading...</span>
-        </div>
-        <div id="search-container">
-            <input type="text" id="search-input" placeholder="Search emails...">
-        </div>
-        <button id="logout-btn">Logout</button>
-    </header>
-    <main>
-        <aside id="folder-buttons"></aside>
-        <section id="email-list">
-            <p>Loading...</p>
-        </section>
-    </main>
-    <script src="breadboard.js"></script>
+  <header>
+    <h1>BreadBoard 🥖</h1>
+    <div id="user-info">
+      Logged in as: <span id="logged-in-email"></span>
+      <button id="logout-btn">Logout</button>
+    </div>
+    <div id="search-container">
+      <input type="text" id="search-input" placeholder="Search emails..." />
+    </div>
+  </header>
+  <main>
+    <aside id="folder-buttons"></aside>
+    <section id="email-list">
+      <p>Loading emails...</p>
+    </section>
+  </main>
+  <script src="breadboard.js"></script>
 </body>
 </html>
