@@ -17,10 +17,9 @@
             <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                <div>
-                    <input type="checkbox" id="showPassword">
-                    <label for="showPassword">Show Password</label>
-                </div>
+                <label>
+                    <input type="checkbox" id="showPassword"> Show Password
+                </label>
             </div>
             <div class="form-group">
                 <label for="server">IMAP Server:</label>
@@ -31,12 +30,13 @@
                 <input type="number" id="port" name="port" placeholder="993" value="993" required>
             </div>
             <div class="form-group">
-                <input type="checkbox" id="ssl" name="ssl" checked>
-                <label for="ssl">Enable SSL</label>
+                <label>
+                    <input type="checkbox" id="ssl" name="ssl" checked> Enable SSL
+                </label>
             </div>
-            <div class="form-group">
-                <label for="smtp">SMTP Server:</label>
-                <input type="text" id="smtp" name="smtp" placeholder="smtp.example.com" disabled>
+            <div class="form-group disabled">
+                <label for="smtp-server">SMTP Server (coming soon):</label>
+                <input type="text" id="smtp-server" name="smtp-server" placeholder="smtp.example.com" disabled>
             </div>
             <button type="submit" class="submit-button">Log In</button>
         </form>

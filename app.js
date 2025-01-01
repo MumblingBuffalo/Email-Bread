@@ -1,41 +1,41 @@
-document.getElementById('emailForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+document.getElementById("showPassword").addEventListener("change", function () {
+    const passwordField = document.getElementById("password");
+    passwordField.type = this.checked ? "text" : "password";
+});
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-    const server = document.getElementById('server').value;
-    const port = document.getElementById('port').value;
-    const ssl = document.getElementById('ssl').checked;
+document.getElementById("emailForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("status").textContent = "";
 
-    // Display loading message
-    const loadingMessage = document.getElementById('loading');
-    loadingMessage.style.display = 'block';
-    loadingMessage.textContent = 'Loading...';
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+    const server = document.getElementById("server").value;
+    const port = document.getElementById("port").value;
+    const ssl = document.getElementById("ssl").checked;
 
     try {
-        const response = await fetch('http://localhost:3000/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, server, port, ssl })
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            window.location.href = 'breadboard.html';
-        } else {
-            throw new Error(result.message || 'Invalid credentials or server error.');
-        }
+        const emails = await fetchEmails(username, password, server, port, ssl);
+        localStorage.setItem("emails", JSON.stringify(emails));
+        window.location.href = "breadboard.html";
     } catch (error) {
-        document.getElementById('status').textContent = `Login failed: ${error.message}`;
-        console.error('Login error:', error);
+        document.getElementById("status").textContent = `Login failed: ${error.message}`;
     } finally {
-        loadingMessage.style.display = 'none';
+        document.getElementById("loading").style.display = "none";
     }
 });
 
-// Password visibility toggle
-document.getElementById('showPassword').addEventListener('change', function () {
-    const passwordField = document.getElementById('password');
-    passwordField.type = this.checked ? 'text' : 'password';
-});
+async function fetchEmails(username, password, server, port, ssl) {
+    // Mock function to simulate IMAP fetching
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            if (username && password && server) {
+                resolve([
+                    { subject: "Welcome!", from: "admin@example.com", date: new Date() },
+                ]);
+            } else {
+                reject(new Error("Invalid credentials"));
+            }
+        }, 2000);
+    });
+}
