@@ -1,41 +1,34 @@
-document.getElementById("showPassword").addEventListener("change", function () {
-    const passwordField = document.getElementById("password");
-    passwordField.type = this.checked ? "text" : "password";
-});
+document.getElementById('login-form').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const imapServer = document.getElementById('imap-server').value;
+    const port = document.getElementById('port').value;
+    const ssl = document.getElementById('ssl').checked;
 
-document.getElementById("emailForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    document.getElementById("loading").style.display = "block";
-    document.getElementById("status").textContent = "";
-
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
-    const server = document.getElementById("server").value;
-    const port = document.getElementById("port").value;
-    const ssl = document.getElementById("ssl").checked;
-
-    try {
-        const emails = await fetchEmails(username, password, server, port, ssl);
-        localStorage.setItem("emails", JSON.stringify(emails));
-        window.location.href = "breadboard.html";
-    } catch (error) {
-        document.getElementById("status").textContent = `Login failed: ${error.message}`;
-    } finally {
-        document.getElementById("loading").style.display = "none";
+    // Simulating login success
+    if (email && password && imapServer && port) {
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('breadboard').classList.remove('hidden');
+    } else {
+        document.getElementById('status').textContent = 'Login failed: Please check inputs.';
     }
 });
 
-async function fetchEmails(username, password, server, port, ssl) {
-    // Mock function to simulate IMAP fetching
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            if (username && password && server) {
-                resolve([
-                    { subject: "Welcome!", from: "admin@example.com", date: new Date() },
-                ]);
-            } else {
-                reject(new Error("Invalid credentials"));
-            }
-        }, 2000);
+document.getElementById('logout').addEventListener('click', () => {
+    document.getElementById('breadboard').classList.add('hidden');
+    document.getElementById('login-page').classList.remove('hidden');
+});
+
+document.querySelectorAll('.folder-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        const folder = button.dataset.folder;
+        document.getElementById('folder-name').textContent = folder.charAt(0).toUpperCase() + folder.slice(1);
+        document.getElementById('email-list').innerHTML = `<li>Loading ${folder}...</li>`;
     });
-}
+});
+
+document.getElementById('refresh').addEventListener('click', () => {
+    document.getElementById('email-list').innerHTML = '<li>Refreshing...</li>';
+});
+
